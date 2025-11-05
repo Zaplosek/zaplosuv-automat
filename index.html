@@ -107,10 +107,11 @@ const winImg = document.getElementById("winImg");
 
 function getRandomSymbol(){
     let r = Math.random();
-    if(r < 0.3) return winSymbol; // 30% šance Matyáš
-    if(r < 0.7) return symbols[Math.floor(Math.random()*symbols.length)]; // 40% malé výhry
-    return symbols[Math.floor(Math.random()*symbols.length)]; // 30% ostatní
+    if(r < 0.2) return winSymbol; // 20% šance Matyáš místo původních 30%
+    if(r < 0.45) return symbols[Math.floor(Math.random()*symbols.length)]; // malé výhry 25% místo 40%
+    return symbols[Math.floor(Math.random()*symbols.length)]; // ostatní 55% místo 30%
 }
+
 
 function updateBalance(){ document.getElementById("balance").textContent = balance; }
 
@@ -195,6 +196,7 @@ function checkResult(bet){
 
 </body>
 </html>
+
 
 
 
