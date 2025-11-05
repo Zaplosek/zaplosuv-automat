@@ -1,153 +1,116 @@
 <!DOCTYPE html>
 <html lang="cs">
-    <img id="winImg" src="matyas.jpg" alt="Matyas Zapletal">
 <head>
 <meta charset="UTF-8">
-<meta name="description" content="Zaplošův automat – 3×3 herní automat s animacemi a výhrou">
 <title>Zaplošův automat 🎰</title>
 <style>
-    body {
-        background: linear-gradient(to bottom, #a0eaff, #fff);
-        font-family: Arial, sans-serif;
-        text-align: center;
-        padding: 50px;
-        color: #333;
-    }
-
-    h1 {
-        font-size: 40px;
-        margin-bottom: 20px;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    }
-
-    .balance {
-        font-size: 26px;
-        margin-bottom: 20px;
-    }
-
-    .controls {
-        margin-bottom: 30px;
-    }
-
-    input[type="number"] {
-        width: 120px;
-        font-size: 18px;
-        padding: 5px;
-        text-align: center;
-        border: 2px solid #888;
-        border-radius: 6px;
-    }
-
-    button {
-        padding: 12px 24px;
-        font-size: 22px;
-        border-radius: 12px;
-        border: none;
-        cursor: pointer;
-        background-color: #ff4500;
-        color: #fff;
-        box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
-        transition: background-color 0.3s, transform 0.2s;
-    }
-
-    button:hover {
-        background-color: #ff6347;
-        transform: scale(1.07);
-    }
-
-    .reels {
-        display: grid;
-        grid-template-columns: repeat(3, 110px);
-        grid-gap: 12px;
-        justify-content: center;
-        margin-bottom: 20px;
-    }
-
-    .reel {
-        width: 110px;
-        height: 110px;
-        border: 4px solid #000;
-        border-radius: 12px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 60px;
-        background-color: #fff;
-        box-shadow: 3px 3px 15px rgba(0,0,0,0.3);
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .reel.spin {
-        animation: spinAnim 0.8s ease-in-out infinite;
-    }
-
-    @keyframes spinAnim {
-        0%   { transform: rotateX(0deg)   scale(1); box-shadow: 3px 3px 15px rgba(0,0,0,0.3); }
-        50%  { transform: rotateX(90deg)  scale(1.1); box-shadow: 3px 3px 25px rgba(0,0,0,0.5); }
-        100% { transform: rotateX(180deg) scale(1); box-shadow: 3px 3px 15px rgba(0,0,0,0.3); }
-    }
-
-    .reel.win {
-        animation: flash 0.4s infinite alternate;
-    }
-
-    @keyframes flash {
-        from { box-shadow: 0 0 30px gold; }
-        to   { box-shadow: 0 0 60px orange; }
-    }
-
-    #result {
-        font-size: 28px;
-        font-weight: bold;
-        margin-top: 30px;
-        min-height: 40px;
-    }
-
-    #winImg {
-        display: none;
-        margin-top: 20px;
-        width: 220px;
-        border: 4px solid gold;
-        border-radius: 12px;
-        animation: popIn 0.8s ease forwards;
-    }
-
-    @keyframes popIn {
-        0%   { transform: scale(0); opacity: 0; }
-        60%  { transform: scale(1.2); opacity: 1; }
-        100% { transform: scale(1); opacity: 1; }
-    }
+body {
+    margin:0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom,#1a1a1a,#0f0f0f);
+    color:#fff;
+    text-align:center;
+    padding:50px 0;
+}
+h1 {
+    font-size:70px;
+    margin-bottom:40px;
+    color:#ffcc00;
+    text-shadow:4px 4px 10px rgba(0,0,0,0.7);
+}
+.balance {font-size:32px;margin-bottom:30px;}
+.controls {margin-bottom:40px;}
+input[type="number"] {
+    width:150px;font-size:22px;padding:10px;text-align:center;border:3px solid #888;border-radius:10px;
+}
+button {
+    padding:20px 40px;font-size:28px;border-radius:20px;border:none;cursor:pointer;
+    background-color:#ff4500;color:#fff;box-shadow:4px 4px 15px rgba(0,0,0,0.5);
+    transition:0.2s;
+}
+button:hover {background-color:#ff6347;transform:scale(1.1);}
+.reels {
+    display:grid;
+    grid-template-columns:repeat(3,150px);
+    grid-gap:20px;
+    justify-content:center;
+    margin-bottom:40px;
+}
+.reel {
+    width:150px;height:150px;
+    border:5px solid #fff;border-radius:15px;
+    background-color:#000;
+    display:flex;justify-content:center;align-items:center;
+    font-size:80px;box-shadow:5px 5px 20px rgba(255,255,255,0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.reel.spin {animation:spinAnim 1s ease-in-out infinite;}
+@keyframes spinAnim {
+    0% {transform:rotateX(0deg) scale(1);}
+    50% {transform:rotateX(90deg) scale(1.2);}
+    100% {transform:rotateX(180deg) scale(1);}
+}
+.reel.win {animation:flash 0.4s infinite alternate,bounce 0.6s ease infinite;}
+@keyframes flash {from{box-shadow:0 0 40px gold;} to{box-shadow:0 0 100px orange;}}
+@keyframes bounce {0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);}}
+#result {font-size:36px;font-weight:bold;margin-top:30px;min-height:60px;}
+#winImg {
+    display:none;
+    width:350px;
+    border:6px solid gold;
+    border-radius:20px;
+    position:relative;
+}
+#winImg.big {
+    animation:popFlyBig 1.5s ease forwards;
+}
+@keyframes popFlyBig {
+    0% {transform:scale(0) translateY(0) rotate(0deg); opacity:0;}
+    50% {transform:scale(2.5) translateY(-400px) rotate(30deg); opacity:1;}
+    70% {transform:scale(2) translateY(-250px) rotate(-15deg);}
+    100% {transform:scale(1.5) translateY(0) rotate(0deg); opacity:1;}
+}
+#winImg.small {animation:popFlySmall 1s ease forwards;}
+@keyframes popFlySmall {
+    0% {transform:scale(0) translateY(0) rotate(0deg); opacity:0;}
+    50% {transform:scale(1.5) translateY(-150px) rotate(15deg); opacity:1;}
+    70% {transform:scale(1.2) translateY(-100px) rotate(-10deg);}
+    100% {transform:scale(1) translateY(0) rotate(0deg); opacity:1;}
+}
 </style>
 </head>
 <body>
 
 <h1>Zaplošův automat 🎰</h1>
-
-<div class="balance">Tvůj zůstatek: <span id="balance">100</span> Kč</div>
-
+<div class="balance">Tvůj zůstatek: <span id="balance">1000</span> Kč</div>
 <div class="controls">
-    <label for="bet">Sázka:</label>
-    <input type="number" id="bet" value="10" min="1">
+<label for="bet">Sázka:</label>
+<input type="number" id="bet" value="50" min="1">
 </div>
 
 <div class="reels" id="reels">
-    <div class="reel"></div><div class="reel"></div><div class="reel"></div>
-    <div class="reel"></div><div class="reel"></div><div class="reel"></div>
-    <div class="reel"></div><div class="reel"></div><div class="reel"></div>
+<div class="reel"></div><div class="reel"></div><div class="reel"></div>
+<div class="reel"></div><div class="reel"></div><div class="reel"></div>
+<div class="reel"></div><div class="reel"></div><div class="reel"></div>
 </div>
 
 <button onclick="spin()">SPIN</button>
-
 <div id="result"></div>
-<img id="winImg" src="https://www.handball.cz/getimage.aspx?type=hracfoto&guid=c90683ae-ac0f-413e-bb3a-636e5fba9d22" alt="Matyas Zapletal">
+<img id="winImg" src="matyas.jpg">
 
 <script>
-let balance = 100;
-const symbols = ["🍒","🍋","🍊","🍉","🍇","⭐"];
+let balance = 1000;
+const symbols = ["🍒","🍋","🍊","🍉","🍇"];
+const winSymbol = "⭐"; // Matyáš
 const reels = Array.from(document.querySelectorAll(".reel"));
 const winImg = document.getElementById("winImg");
 
-function getRandomSymbol(){ return symbols[Math.floor(Math.random()*symbols.length)]; }
+function getRandomSymbol(){
+    let r = Math.random();
+    if(r < 0.3) return winSymbol; // 30% šance Matyáš
+    if(r < 0.7) return symbols[Math.floor(Math.random()*symbols.length)]; // 40% malé výhry
+    return symbols[Math.floor(Math.random()*symbols.length)]; // 30% ostatní
+}
 
 function updateBalance(){ document.getElementById("balance").textContent = balance; }
 
@@ -156,22 +119,23 @@ function spin(){
     if(!bet || bet <= 0){ alert("Zadej kladnou sázku!"); return; }
     if(bet>balance){ alert("Nemáš dostatek peněz na tuto sázku!"); return; }
 
-    winImg.style.display = "none"; // schovej obrázek při novém kole
+    winImg.style.display = "none"; 
+    winImg.className="";
     balance -= bet;
     updateBalance();
     document.getElementById("result").textContent = "🎰 SPIN...";
 
     reels.forEach(r => { r.classList.remove("win"); r.classList.add("spin"); });
 
-    const spinTimes = reels.map(()=>Math.random()*1000 + 1200);
+    const spinTimes = reels.map(()=>Math.random()*1500 + 1500);
     reels.forEach((reel,index)=>{
-        let interval = setInterval(()=>{ reel.textContent=getRandomSymbol(); },80);
+        let interval = setInterval(()=>{ reel.textContent=getRandomSymbol(); },60);
         setTimeout(()=>{
             clearInterval(interval);
             reel.textContent=getRandomSymbol();
             reel.classList.remove("spin");
             if(index===reels.length-1) checkResult(bet);
-        }, spinTimes[index]);
+        },spinTimes[index]);
     });
 }
 
@@ -179,27 +143,37 @@ function checkResult(bet){
     const grid=[];
     for(let i=0;i<3;i++) grid.push(reels.slice(i*3,i*3+3).map(r=>r.textContent));
 
-    let win=0; const winningReels=[];
+    let win=0; 
+    const winningReels=[];
     // řádky
     grid.forEach((row,i)=>{
-        if(row[0]===row[1]&&row[1]===row[2]){
-            win+=bet*5; winningReels.push(reels[i*3],reels[i*3+1],reels[i*3+2]);
-        } else if(row[0]===row[1]||row[0]===row[2]||row[1]===row[2]){
-            win+=bet*2; row.forEach((sym,j)=>{ if(sym===row[(j+1)%3]) winningReels.push(reels[i*3+j]); });
+        let counts = {};
+        row.forEach(s=>counts[s]=(counts[s]||0)+1);
+        for(let key in counts){
+            if(key===winSymbol && counts[key]===3){ 
+                win+=bet*50; // JACKPOT
+                winningReels.push(reels[i*3],reels[i*3+1],reels[i*3+2]);
+            } else if(counts[key]>=2){ 
+                win+=bet*5; // malé výhry
+                row.forEach((s,j)=>{ if(s===key) winningReels.push(reels[i*3+j]); });
+            }
         }
     });
     // sloupce
     for(let j=0;j<3;j++){
-        if(grid[0][j]===grid[1][j]&&grid[1][j]===grid[2][j]){
-            win+=bet*5; winningReels.push(reels[j],reels[j+3],reels[j+6]);
-        } else if(grid[0][j]===grid[1][j]||grid[0][j]===grid[2][j]||grid[1][j]===grid[2][j]){
-            for(let i=0;i<3;i++){ if(grid[i][j]===grid[(i+1)%3][j]) winningReels.push(reels[i*3+j]); }
-            win+=bet*2;
+        let col=[grid[0][j],grid[1][j],grid[2][j]];
+        let counts={};
+        col.forEach(s=>counts[s]=(counts[s]||0)+1);
+        for(let key in counts){
+            if(key===winSymbol && counts[key]===3){ 
+                win+=bet*50;
+                winningReels.push(reels[j],reels[j+3],reels[j+6]);
+            } else if(counts[key]>=2){
+                win+=bet*5;
+                for(let i=0;i<3;i++) if(col[i]===key) winningReels.push(reels[i*3+j]);
+            }
         }
     }
-    // diagonály
-    if(grid[0][0]===grid[1][1]&&grid[1][1]===grid[2][2]){ win+=bet*5; winningReels.push(reels[0],reels[4],reels[8]); }
-    if(grid[0][2]===grid[1][1]&&grid[1][1]===grid[2][0]){ win+=bet*5; winningReels.push(reels[2],reels[4],reels[6]); }
 
     balance+=win;
     updateBalance();
@@ -208,15 +182,19 @@ function checkResult(bet){
         winningReels.forEach(r=>r.classList.add("win"));
         document.getElementById("result").textContent=`🎉 Vyhrál jsi ${win} Kč! 🎉`;
         winImg.style.display="block";
-        winImg.style.animation="popIn 0.8s ease forwards";
+        if(win>=bet*50){
+            winImg.className="big"; // obrovský efekt
+        } else {
+            winImg.className="small"; // malé vyletění
+        }
     } else {
         document.getElementById("result").textContent="😢 Bohužel prohrál jsi.";
-        winImg.style.display="none";
     }
 }
 </script>
 
 </body>
 </html>
+
 
 
