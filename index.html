@@ -105,13 +105,13 @@ const winSymbol = "⭐"; // Matyáš
 const reels = Array.from(document.querySelectorAll(".reel"));
 const winImg = document.getElementById("winImg");
 
+// Těžší verze: snížená šance na výhru
 function getRandomSymbol(){
     let r = Math.random();
-    if(r < 0.2) return winSymbol; // 20% šance Matyáš místo původních 30%
+    if(r < 0.2) return winSymbol; // 20% šance Matyáš (původně 30%)
     if(r < 0.45) return symbols[Math.floor(Math.random()*symbols.length)]; // malé výhry 25% místo 40%
-    return symbols[Math.floor(Math.random()*symbols.length)]; // ostatní 55% místo 30%
+    return symbols[Math.floor(Math.random()*symbols.length)]; // ostatní 55%
 }
-
 
 function updateBalance(){ document.getElementById("balance").textContent = balance; }
 
@@ -182,21 +182,4 @@ function checkResult(bet){
     if(win>0){
         winningReels.forEach(r=>r.classList.add("win"));
         document.getElementById("result").textContent=`🎉 Vyhrál jsi ${win} Kč! 🎉`;
-        winImg.style.display="block";
-        if(win>=bet*50){
-            winImg.className="big"; // obrovský efekt
-        } else {
-            winImg.className="small"; // malé vyletění
-        }
-    } else {
-        document.getElementById("result").textContent="😢 Bohužel prohrál jsi.";
-    }
-}
-</script>
-
-</body>
-</html>
-
-
-
-
+        winImg.style
