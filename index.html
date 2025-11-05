@@ -101,96 +101,58 @@ button:hover {background-color:#ff6347;transform:scale(1.1);}
 <script>
 let balance = 1000;
 const symbols = ["🍒","🍋","🍊","🍉","🍇"];
-const winSymbol = "⭐"; // Matyáš
 const reels = Array.from(document.querySelectorAll(".reel"));
 const winImg = document.getElementById("winImg");
 
-// Funkce pro výběr symbolu s těžšími šancemi
-function getRandomSymbol(){
-    let r = Math.random();
-    if(r < 0.1) return winSymbol; // 10% velká výhra
-    if(r < 0.3) return symbols[Math.floor(Math.random()*symbols.length)]; // 20% malé výhry
-    return symbols[Math.floor(Math.random()*symbols.length)]; // 70% ostatní symboly
-}
-
 function updateBalance(){ document.getElementById("balance").textContent = balance; }
 
-function spin(){
+function spin() {
     let bet = parseInt(document.getElementById("bet").value);
-    if(!bet || bet <= 0){ alert("Zadej kladnou sázku!"); return; }
-    if(bet>balance){ alert("Nemáš dostatek peněz na tuto sázku!"); return; }
+    if (!bet || bet <= 0) { alert("Zadej kladnou sázku!"); return; }
+    if (bet > balance) { alert("Nemáš dostatek peněz!"); return; }
 
-    winImg.style.display = "none"; 
-    winImg.className="";
     balance -= bet;
     updateBalance();
     document.getElementById("result").textContent = "🎰 SPIN...";
+    winImg.style.display = "none";
+    winImg.className = "";
 
-    reels.forEach(r => { r.classList.remove("win"); r.classList.add("spin"); });
+    // rozhodnutí o výhře
+    let rnd = Math.random();
+    let bigWin = rnd < 0.1;   // 10% velká výhra
+    let smallWin = !bigWin && rnd < 0.3; // 20% malá výhra
 
-    const spinTimes = reels.map(()=>Math.random()*1500 + 1500);
-    reels.forEach((reel,index)=>{
-        let interval = setInterval(()=>{ reel.textContent=getRandomSymbol(); },60);
-        setTimeout(()=>{
-            clearInterval(interval);
-            reel.textContent=getRandomSymbol();
-            reel.classList.remove("spin");
-            if(index===reels.length-1) checkResult(bet);
-        },spinTimes[index]);
-    });
-}
-
-function checkResult(bet){
-    const grid=[];
-    for(let i=0;i<3;i++) grid.push(reels.slice(i*3,i*3+3).map(r=>r.textContent));
-
-    let win=0; 
-    const winningReels=[];
-    // řádky
-    grid.forEach((row,i)=>{
-        let counts = {};
-        row.forEach(s=>counts[s]=(counts[s]||0)+1);
-        for(let key in counts){
-            if(key===winSymbol && counts[key]===3){ 
-                win+=bet*50; // JACKPOT
-                winningReels.push(reels[i*3],reels[i*3+1],reels[i*3+2]);
-            } else if(counts[key]>=2){ 
-                win+=bet*5; // malé výhry
-                row.forEach((s,j)=>{ if(s===key) winningReels.push(reels[i*3+j]); });
-            }
+    let grid = [];
+    for (let i = 0; i < 3; i++) {
+        let row = [];
+        for (let j = 0; j < 3; j++) {
+            if (bigWin) row.push("⭐"); // jackpot
+            else if (smallWin && i === 0) row.push(symbols[0]); // malá výhra v prvním řádku
+            else row.push(symbols[Math.floor(Math.random() * symbols.length)]);
         }
-    });
-    // sloupce
-    for(let j=0;j<3;j++){
-        let col=[grid[0][j],grid[1][j],grid[2][j]];
-        let counts={};
-        col.forEach(s=>counts[s]=(counts[s]||0)+1);
-        for(let key in counts){
-            if(key===winSymbol && counts[key]===3){ 
-                win+=bet*50;
-                winningReels.push(reels[j],reels[j+3],reels[j+6]);
-            } else if(counts[key]>=2){
-                win+=bet*5;
-                for(let i=0;i<3;i++) if(col[i]===key) winningReels.push(reels[i*3+j]);
-            }
-        }
+        grid.push(row);
     }
 
-    balance+=win;
+    // přiřazení do reelů
+    for (let i = 0; i < 3; i++)
+        for (let j = 0; j < 3; j++)
+            reels[i*3 + j].textContent = grid[i][j];
+
+    // výpočet výhry
+    let win = 0;
+    if (bigWin) win = bet * 50;
+    else if (smallWin) win = bet * 5;
+
+    balance += win;
     updateBalance();
 
-    if(win>0){
-        winningReels.forEach(r=>r.classList.add("win"));
-        document.getElementById("result").textContent=`🎉 Vyhrál jsi ${win} Kč! 🎉`;
-        winImg.style.display = "block"; 
-        if(win>=bet*50){
-            winImg.className = "big"; // obrovský efekt
-        } else {
-            winImg.className = "small"; // menší efekt
-        }
+    if (win > 0) {
+        reels.forEach(r => r.classList.add("win"));
+        document.getElementById("result").textContent = `🎉 Vyhrál jsi ${win} Kč! 🎉`;
+        winImg.style.display = "block";
+        winImg.className = bigWin ? "big" : "small";
     } else {
-        document.getElementById("result").textContent="😢 Bohužel prohrál jsi.";
-        winImg.style.display = "none";
+        document.getElementById("result").textContent = "😢 Bohužel prohrál jsi.";
     }
 }
 </script>
